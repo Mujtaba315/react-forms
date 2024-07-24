@@ -4,8 +4,12 @@ import { useState } from 'react';
 function App() {
 
   const [background, setBackground] = useState(false);
-  const [name, setName] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [fullName, setFullName] = useState ({
+    fName: "",
+    lName: "",
+    email: ""
+  });
 
   function handleMouseOver () {
     setBackground(true);
@@ -16,7 +20,14 @@ function App() {
   }
 
   function handleChange (e) {
-    setName(e.target.value);
+    const {name, value} = e.target;
+
+    setFullName((prevValue) => {
+      return {
+        ...prevValue,
+        [name]: value
+      };
+    });
   }
 
   function handleClick (e) {
@@ -26,14 +37,32 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Hello {isSubmitted && name + ", your form is submitted"}</h1>
+      <h1>Hello {isSubmitted && fullName.fName + " " + fullName.lName + ", your form is submitted"}</h1>
+      <p>{isSubmitted && fullName.email}</p>
 
       <form onSubmit={handleClick}>
         <input 
+          name="fName"
           onChange={handleChange}
           type="text" 
-          placeholder="What's your name?"
-          value={name}
+          placeholder="First Name"
+          value={fullName.fName}
+        />
+
+        <input 
+          name="lName"
+          onChange={handleChange}
+          type="text" 
+          placeholder="Last Name"
+          value={fullName.lName}
+        />
+
+        <input 
+          name="email"
+          onChange={handleChange}
+          type="text" 
+          placeholder="Email"
+          value={fullName.email}
         />
 
         <button
